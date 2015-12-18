@@ -1,0 +1,350 @@
+---
+title: "TP1"
+author: "Kevin  Caye"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+L'objectif de ce TP est de se familiariser avec une démarche expérimentale associant modélisation mathématique et problématique biologique avec usage de l'outil informatique. Le thème biologique choisi concerne la « croissance de populations biologiques ». Au cours du TP nous découvrirons comment les biologistes ont pu trouver dans le modèle de l'équation logistique réponse à leurs questionnements, mais aussi quelles peuvent être les limites du modèle.
+Dans ce contexte, les problèmes rencontrés par les biologistes représentent un spectre assez large illustrant la croissance de populations cellulaires procaryotes (bactéries) aussi bien que d'eucaryotes (paramécies, levures, lignées cellulaires tumorales humaines) et de populations animales variées. Nous nous limiterons dans ce TP à l'étude de populations de levure et de populations bactériennes. Les plus curieux dans ce domaine pourront choisir de développer une autre application dans la poursuite de cette unité d'enseignement au niveau d'un tutorat (UE d'ouverture).
+
+# I- Prise en main de Scilab 
+
+## I-1 Premiers pas
+
+Le travail experimental sera effectué avec le logiciel Scilab. Cette partie a pour objectif de vous familiariser avec cet outils.
+
+- Ouvrez le logiciel Scilab.
+- Ouvrez SciNotes l'éditeur de texte qui va nous permettre d'écrire les scripts : *Applicatins -> SciNotes* 
+- Copier les données experimentales dans SciNotes
+```scilab
+// données expérimentales
+levureC=[ 0 1.5 9 10 18 18 23 25.5 27 34 38 42 45.5 47 ; 0.37 1.63 6.2 8.87 10.66 10.97 12.5 12.6 12.9 13.27 12.77 12.87 12.9 12.7];
+```
+Ces lignes vont creer une matrice avec le temps en première colonne et la quantité de levure en deuxieme colonne.
+
+- Copier ses lignes à la suite pour faire un plot des données 
+```scilab
+//Ouvre une nouvelle fenêtre graphique
+clf();
+// graphiques
+// affichage des points (symbole croix) 
+plot2d(levureC(1,:),levureC(2,:),style=[-2]);
+```
+
+- Sauvgarder votre script : *ctrl + s*
+- Executer votre script : *ctrl + maj + e*. Les lignes de code sont alors envoyé dans la console pour eter executé. Quand ils y a des **erreurs** dans les scripts c'est dans cette **console** que les erreurs s'affichent. 
+
+Nous allons ameliorer le plot : 
+
+- Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
+```scilab
+// tracé de segments de droites entre les divers points
+plot2d(levureC(1,:),levureC(2,:),style=[5]);
+```
+- Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
+```scilab
+// définition de la fenêtre graphique
+Tmin=0
+Tmax=50;
+DOmin=0;
+DOmax=15;
+rect=[Tmin,DOmin;Tmax,DOmax];
+// Parametrage des axes
+a=gca();
+a.data_bounds=rect;
+```
+- Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
+```scilab
+legends(["Levure Cerevisae"],5,5);
+// un clic de souris permet de placer la légende à l'emplacement désiré
+```
+Pensez à cliquer pour placer la légende.
+
+## I-1 Les outils de résolution numérique
+Maintenant nous allons chercher à résoudre l'équation différentielle du modèle exponentiel et à visualiser les solutions : 
+$$\frac{dP}{dt} = k P$$
+
+- Ouvrez un nouveau script : dans SciNotes *Fichier -> Nouveau* ou *ctrl + N*
+
+Nous avons vu en cours que l'on a une solution analytique à cette équation différentielle : 
+$$P(t) = P_0 e^{k t}$$
+
+- Copier ses lignes dans le nouveau script pour définir la fonction de la solution. On remlira les trous `...`. Pensez a executer votre script et verifier dans la console qu'il n'y à pas d'erreur.
+```scilab
+// Paramètre du modèle
+P0 = ...
+k = ...
+// définition de la fonction P
+function res=P(t)
+  res = ...;
+endfunction
+```
+
+- Copier les lignes suivantes à la suite en remplissant les trous `...`
+```scilab
+// définition du vecteur t, les valeurs pour lesquel on veut calculer la fonction
+t0=0;
+tmax=5;
+dt=0.1;
+t=[tO:dt:tmax];
+// plot
+plot2d(..., ..., style=[5]);
+```
+- Visualisez le resultat, vous devez reconnaitre le graph de la fonction exponentielle
+
+Nous allons maintenant résoudre le problème numériquement. C'est à dire que l'on va calculer la fonction solution de l'équation diférentielle avec les outils de résolution numérique de Scilab.
+On va d'abord définir l'équation diférentielle : 
+$$\frac{dP}{dt} = f(t,P)$$
+avec $f(t,P) = k * P$
+
+- A la suite du script copier les lignes suivantes en remplissant les trous `...`
+```scilab
+function Pprim=f(t,P)
+  Pprim = ...;
+endfunction
+```
+Nous alons ensuite utiliser la fonction `ode` de Scilab. Le principe des "solveurs numériques" est de calculer la solution de l'équation diférentiel $\frac{dP}{dt} = f(P)$ de proche en proche. Si on connait la valeur de $P$ au temps $t$ on calcule la valeur au temps $t + dt$ comme ceci : 
+$$\frac{P(t + dt) - P(t)}{dt} = f(t,P(t))$$
+donc
+$$P(t + dt) = P(t) + f(t,P(t)) dt $$
+Ainsi plus $dt$ est petit meilleurs est l'approximation. Les algorithme implémenté dans `ode`sont plus complexe mais suivent cette idée.
+
+Maintenant que nous avons l'intuition du fonctionnement de la fonction `ode` nous allons l'utiliser pour résoudre notre problème
+
+- A la suite du script copier les lignes suivantes 
+```scilab
+// Résolution numérique
+Pnum=ode(P0,t0,t,f);
+```
+
+- Faite un graph de la solution numérique en ajoutant ces lignes
+```scilab
+plot2d(..., ..., style=[4]);
+```
+
+
+Normalement quand vous exécuté tout le script les courbes de la solutions analytique et numérique se suerposent parfaitement.
+
+
+
+# II- Modélisation et simulation
+
+Cette partie comportent des questions, nous vous conseillons de bien y **répondre et noter les réponses**. De plus nous vous conseillons de bien **sauvgarder les graphiques** que vous générez. Tout cela sera util pour le **rapport**.
+
+
+## II-1 Modélisation de la croissance d'une populattion de levure
+
+Voici les données expérimental d'une croissance d'une souche de levure *Saccharomyces cerevisae* : 
+
+```scilab
+// données expérimentales
+levureC=[ 0 1.5 9 10 18 18 23 25.5 27 34 38 42 45.5 47 ; 0.37 1.63 6.2 8.87 10.66 10.97 12.5 12.6 12.9 13.27 12.77 12.87 12.9 12.7];
+```
+
+> Représenter sur un graph la quantité de levure en fonction du temps.
+> Combien de phase pouvez-vous detecter ?
+
+### II-1-a Modélisation de la croissance sur les temps courts
+
+> Proposer une modélisation pour la croissance de la levure sur un temps court.
+> Rappeler l'équation différentielle de ce modèle, ainsi que la solution analytique.
+
+Dans votre script Scilab commencez par ajuster la taille de la fenêtre de temps afin de n'avoir que la phase qui nous interesse ici.
+
+> En vous aidant de la partie I, écrire à la suite de votre script les lignes de code qui vous permêtent de simuler une croissance exponetielle a l'aide de la fonction `ode`. 
+> On choisira les paramêtres qui permête de simuler une croissance la plus proche possible des observations.
+> Faite le graphe qui représente à la fois les données et la simulation.
+
+#### Représentation logarithmique
+
+Il n'est pas facile et pas précis de trouver les paramètres « à la main ». C'est pourquoi nous allons appliquer une transformation logarithmique.
+
+> Justifier pourquoi dans ce modèle on devrait trouvez une droite après cette transformation.
+
+> Représenter sur un graph le logarithme de la quantité de levure en fonction du temps.
+> A partir de quelle mesure sort-on du cadre de votre modèle pourquoi?
+
+On pourrait essayer de retrouver à la main les paramètres du modèle en traçant la droite qui passe le mieux par les points. Mais nous allons plutôt ici utiliser la méthode appelée régression linéaire. Pour cela ajoutez au script les lignes suivantes en remplissant les `...`
+```scilab
+//L'indice de la dernière mesure qui appartient encore à la phase dite de temps court
+mesureTempsCourtMax=..;
+// La régression linéaire
+[k,lnPO] = reglin(levure(1,1:mesureTempsCourtMax),levure(2,1:mesureTempsCourtMax));
+
+//On trace la droite
+plot2d(levure(1,1:mesureTempsCourtMax),levure(1,1:mesureTempsCourtMax) * k + lnPO ,style=[4]);
+
+// On calcule PO à partir lnPO
+PO=..;
+
+//On affiche k et PO à l'écran
+disp(k);
+disp(PO);
+```
+
+> Quelles valeurs de r et PO trouver vous ? Retrouvez-vous les valeurs trouvé à la main ?
+
+### II-1-b Modélisation de la croissance sur les temps longs
+
+> Pourquoi ce modèle de croissance de population n'est-il pas pertinent pour les temps longs de culture ? 
+> Proposez un autre modèle, justifiez.
+
+
+> Rappelez le modèle de l'équation logistique.
+> Définissez clairement les paramètres utilisés dans cette fonction.
+
+
+Nous disposons d'une seconde souche de levure, levure *Schizosaccharomyces kephir*, pour laquelle nous recueillons les données de croissance suivantes :
+
+```scilab
+// données expérimentales
+levureK=[ 9,10,23,25.5,42,45.5,66,87,111,135 ; 1.27,1,1.7,2.33,2.73,4.56,4.87,5.67,5.8,5.83];
+```
+
+> Evaluez la capacité biotique du milieu pour les deux souches de levure : *S. cerevisiae* et *S. Kephir*. 
+> Pour cela, on pourra directement la lire sur les graphes qui représentent les données.
+
+
+De même que pour le modèle exponentiel nous allons essayer de trouver les paramètres graphiquement en comparant le résultat d'une simulation du modèle logistique au données expérimentales. Pour cela on pourra reprendre les scripts du modèle sur les temps cours et l'ajuster pour le modèle logistique.
+
+> Quel sont les paramètres qui expliquent au mieux les données sur la levure S. Kephir ?
+
+Faites la même chose pour le jeu de données *S. cerevisiae*. 
+
+> Quel sont les paramètres qui expliquent au mieux les données sur la levure S. cerevisiae ?
+
+> Comparez les résultats obtenus pour les deux souches.
+> Justifiez alors le temps d'expérimentation pour l'une et l'autre de ces deux souches.
+
+#### Méthode numérique pour trouver les paramètres
+
+Comme pour le modèle exponetiel il existe des méthodes numériques pour trouver les paramètre du modèle logistique de facon automatique. Nous proposons la suivante : 
+
+```scilab
+function xopt=trouve_param_optimaux(tm,ym,x0)
+
+// Fonction permettant de trouver le meilleur set de parametres de la fonction 
+// logisitque a  partir de points experimentaux, au sens des moindres carres;
+
+//clear
+
+// Taille de la liste des points experimentaux :
+m = size(tm,1);
+
+// Initial parameters guess
+// x0 = donne en input;
+
+// Poids de chaque point dans le calcul des moindres carre :
+wm = ones(m,1); // measure weights (here all equal to 1...)
+
+// We want to find the parameters x such that the model fits the given
+// datas in the least square sense:
+//
+// minimize f(x) = sum_i wm(i)^2 ( yth(tm(i),x) - ym(i) )^2
+
+// Factueur de normalisation de la somme des ecarts au carre au point 1 (le scalaire
+// "e" sera egal a 1 a  la premiere iteration dans la minimisation):
+P0C=x0(1); t0=0;
+deff("[logisC]=logistiqueC(t,PC)",["ParamC=[x0(2),x0(3)]","logisC=ParamC(1)*PC*(ParamC(2)-PC)/ParamC(2)"]);
+PC=ode("rk",P0C,t0,tm,logistiqueC)';
+e=wm.*(PC-ym);
+fnorm = sum(((e).^2));
+clear e P0C t0 PC logisC
+
+// Definition de la fonction permettant de calculer l'ecart entre 
+// la fonction utilisant les parametres x et les points experimentaux
+function e = ecart(x, tm, ym, wm, fnorm)
+    
+    // SIMULATION : MODELE LOGISTIQUE
+    // condition initiale
+    P0C=x(1);
+    
+    // temps de simulation
+    t0=0;
+
+    // deff : definition d'une fonction, ici la fonction logistique
+    // t et P : variables en entree de la fonction
+    // logis : variable en sortie de la foncion
+    // Param[1,2] : vecteur de parametres
+    // Param(1) = r:taux d'accroissement
+    // Param(2) = M:capacite biotique
+    
+    deff("[logisC]=logistiqueC(t,PC)",["ParamC=[x(2),x(3)]","logisC=ParamC(1)*PC*(ParamC(2)-PC)/ParamC(2)"]);
+    
+    // ode : Solveur d'equations differentielles ordinaires
+    // "type" ici "rk" : choix de la methode utilisee pour approcher la solution
+    // P0 : population initiale
+    // t0=0 : instant initial
+    // t : instant ou la solution est renvoyee
+    // logistique : fonction
+    PC=ode("rk",P0C,t0,tm,logistiqueC)';
+    
+    // Calcul des erreurs
+    e=wm.*(PC-ym)/sqrt(fnorm);
+    
+//    // Affichage de l'erreur au cours des iterations si voulu :
+//    disp(string(sum(e.^2)))
+    
+endfunction
+
+// now we could call leastsq:
+// Bounds on the parameters :
+xinf=[0;0;0];
+xsup=[20;20;20];
+
+[f,xopt, gropt] = leastsq(list(ecart,tm,ym,wm),"b",xinf,xsup,x0)
+
+endfunction
+```
+
+Vous pouvez dirrectement copiez-collez ce code dans la console Scilab. Cela définira la fonction `trouve_param_optimaux` qui prend en entré `tm` et `ym` respectivement les temps et quantité experimentales et `x0 = [P0, k , M] ` une approximation des paramètres du modèle logistique.
+
+> En utilisant la fonction `trouve_param_optimaux` quelles valeurs obtenez-vous ? 
+
+### II-2 Application à l'étude de la croissance de populations bactériennes
+
+
+Nous allons maintenant appliquer le modèle logistique pour l'étude de la croissance de la bactérie E. Coli. Nous disposons de deux jeux de données correspondant à deux souches bactériennes différentes (wt = souche sauvage et ppG = souche mutée) cultivées selon les mêmes conditions. Pour chacune de ces souches nous disposons de 9 à 8 répétitions expérimentales.
+
+Copiez ses lignes de code dans un nouvau script pour visualiser les données expérimentales.
+
+```scilab
+// *********************************************************************************************
+// DONNEES EXPERIMENTALES BACTERIES
+//
+// Type WT
+//
+BacWT= list( [ 0 4 5.5 7.5 9.5 11 13 24 29 48 ; 0.011 0.138 0.297 0.621 0.943 1.045 1.301 2.350 2.351 2.384],[ 0 4 5.5 7.5 9.5 11 13 24 29 48 ; 0.011 0.126 0.301 0.676 0.935 1.039 1.376 2.308 2.271 2.338],[ 0 4 5.5 7.5 9.5 11 13 24 29 48 ; 0.011 0.127 0.291 0.615 0.892 1.028 1.566 2.385 2.383 2.421],[ 0 4 5.5 7.5 9.5 11 13 24 26 29 31 34 48 ; 0.010 0.119 0.300 0.695 0.895 1.041 1.232 2.179 2.175 2.161 2.165 2.184 2.211],[ 0 4 5.5 7.5 9.5 11 13 24 26 29 31 34 48 ; 0.010 0.120 0.310 0.722 0.882 1.059 1.275 2.139 2.115 2.101 2.096 2.113 2.140],[ 0 4 5.5 7.5 9.5 11 13 24 26 29 31 34 48 ; 0.010 0.116 0.302 0.674 0.878 1.031 1.354 2.116 2.332 2.278 2.724 2.654 2.836],[ 0 4 5.5 7.5 9.5 11 13 24 26 29 31 34 48 ; 0.011 0.111 0.288 0.678 0.876 1.025 1.610 2.712 2.764 2.052 2.324 2.816 2.316],[ 0 4 5.5 7.5 9.5 11 13 24 26 29 31 34 48 ; 0.011 0.107 0.269 0.655 0.847 1.021 1.528 2.704 2.444 2.320 2.368 3.036 3.000],[ 0 4 5.5 7.5 9.5 11 13 24 26 29 31 34 48 ; 0.011 0.113 0.277 0.681 0.866 1.020 1.504 2.744 2.864 2.212 2.392 2.680 3.060] )
+
+for i = 1:9
+    plot2d(BacWT(i)(1,:),BacWT(i)(2,:),style=[-3]);
+    plot2d(BacWT(i)(1,:),BacWT(i)(2,:),style=[3]);
+end
+
+
+legends(["Wt"],3,5);
+
+// Type ppGpp
+//
+BacGp=list( [0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.328 0.719 1.126 1.592 1.728 4.95 4.866 3.984 4.362 4.752],[0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.339 0.733 1.186 1.612 1.976 4.152 4.314 4.05 4.812 4.644], [0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.326 0.72 1.192 1.464 1.6 5.256 4.83 4.356 3.87 4.704], [0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.32 0.698 1.106 1.512 1.572 5.232 5.01 4.998 4.266 4.788], [0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.319 0.69 1.122 1.444 1.672 4.992 4.764 4.734 5.004 6.096], [0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.326 0.729 1.11 1.504 1.76 5.256 5.226 5.124 5.148 5.436], [0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.351 0.765 1.184 1.516 1.704 4.992 4.596 4.716 4.83 4.812], [0 4 5.5 7.5 9.5 11 24 26 29 31 34 ; 0.011 0.357 0.782 1.214 1.628 1.744 5.316 5.472 4.98 5.148 4.938])
+
+for i = 1:8
+    plot2d(BacGp(i)(1,:),BacGp(i)(2,:),style=[-4]);
+    plot2d(BacGp(i)(1,:),BacGp(i)(2,:),style=[5]);
+end
+
+legends(["ppGpp"],5,5);
+```
+
+> Visualisez ces données : qu'en pensez-vous ? Quelle modèle peut-on utiliser ?
+
+> Que pensez-vous de la nécessité de réaliser des répétitions d'expériences ?
+> Justifiez vos commentaires ?
+
+> Admettons que nous choisissons un modèle logistique. Nous pouvons calculer de façon automatique les paramètres pour chaque expérience. 
+> Comment allons-nous utiliser toutes les expériences pour estimer au mieux les paramètres ?
+
+> En utilisant les scripts précédents écrivez un script Scilab qui utilise toutes les données à notre disposition pour estimer au mieux les paramètres à chaque espèce. 
+> Ainsi interpréter ces valeurs pour conclure sur l'influence de la mutation.
