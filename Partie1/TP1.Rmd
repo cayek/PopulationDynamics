@@ -1,8 +1,11 @@
 ---
 title: "TP1"
 author: "Kevin  Caye"
-date: "`r Sys.Date()`"
-output: html_document
+date: "`r Sys.Date()`"  
+output: 
+  html_document:
+    theme: united
+    highlight: tango
 ---
 
 
@@ -18,14 +21,14 @@ Le travail experimental sera effectué avec le logiciel Scilab. Cette partie a po
 - Ouvrez le logiciel Scilab.
 - Ouvrez SciNotes l'éditeur de texte qui va nous permettre d'écrire les scripts : *Applicatins -> SciNotes* 
 - Copier les données experimentales dans SciNotes
-```scilab
+```javascript
 // données expérimentales
 levureC=[ 0 1.5 9 10 18 18 23 25.5 27 34 38 42 45.5 47 ; 0.37 1.63 6.2 8.87 10.66 10.97 12.5 12.6 12.9 13.27 12.77 12.87 12.9 12.7];
 ```
 Ces lignes vont creer une matrice avec le temps en première colonne et la quantité de levure en deuxieme colonne.
 
 - Copier ses lignes à la suite pour faire un plot des données 
-```scilab
+```javascript
 //Ouvre une nouvelle fenêtre graphique
 clf();
 // graphiques
@@ -39,12 +42,12 @@ plot2d(levureC(1,:),levureC(2,:),style=[-2]);
 Nous allons ameliorer le plot : 
 
 - Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
-```scilab
+```javascript
 // tracé de segments de droites entre les divers points
 plot2d(levureC(1,:),levureC(2,:),style=[5]);
 ```
 - Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
-```scilab
+```javascript
 // définition de la fenêtre graphique
 Tmin=0
 Tmax=50;
@@ -56,7 +59,7 @@ a=gca();
 a.data_bounds=rect;
 ```
 - Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
-```scilab
+```javascript
 legends(["Levure Cerevisae"],5,5);
 // un clic de souris permet de placer la légende à l'emplacement désiré
 ```
@@ -72,7 +75,7 @@ Nous avons vu en cours que l'on a une solution analytique à cette équation diffé
 $$P(t) = P_0 e^{k t}$$
 
 - Copier ses lignes dans le nouveau script pour définir la fonction de la solution. On remlira les trous `...`. Pensez a executer votre script et verifier dans la console qu'il n'y à pas d'erreur.
-```scilab
+```javascript
 // Paramètre du modèle
 P0 = ...
 k = ...
@@ -83,12 +86,12 @@ endfunction
 ```
 
 - Copier les lignes suivantes à la suite en remplissant les trous `...`
-```scilab
-// définition du vecteur t, les valeurs pour lesquel on veut calculer la fonction
+```javascript
+// définition du vecteur t, les temps pour lesquel on veut calculer la fonction
 t0=0;
 tmax=5;
 dt=0.1;
-t=[tO:dt:tmax];
+t=[t0:dt:tmax];
 // plot
 plot2d(..., ..., style=[5]);
 ```
@@ -100,7 +103,7 @@ $$\frac{dP}{dt} = f(t,P)$$
 avec $f(t,P) = k * P$
 
 - A la suite du script copier les lignes suivantes en remplissant les trous `...`
-```scilab
+```javascript
 function Pprim=f(t,P)
   Pprim = ...;
 endfunction
@@ -114,13 +117,13 @@ Ainsi plus $dt$ est petit meilleurs est l'approximation. Les algorithme implémen
 Maintenant que nous avons l'intuition du fonctionnement de la fonction `ode` nous allons l'utiliser pour résoudre notre problème
 
 - A la suite du script copier les lignes suivantes 
-```scilab
+```javascript
 // Résolution numérique
 Pnum=ode(P0,t0,t,f);
 ```
 
 - Faite un graph de la solution numérique en ajoutant ces lignes
-```scilab
+```javascript
 plot2d(..., ..., style=[4]);
 ```
 
@@ -138,22 +141,22 @@ Cette partie comportent des questions, nous vous conseillons de bien y **répondr
 
 Voici les données expérimental d'une croissance d'une souche de levure *Saccharomyces cerevisae* : 
 
-```scilab
+```javascript
 // données expérimentales
 levureC=[ 0 1.5 9 10 18 18 23 25.5 27 34 38 42 45.5 47 ; 0.37 1.63 6.2 8.87 10.66 10.97 12.5 12.6 12.9 13.27 12.77 12.87 12.9 12.7];
 ```
 
-> Représenter sur un graph la quantité de levure en fonction du temps.
+> **Question 1 **Représenter sur un graph la quantité de levure en fonction du temps.
 > Combien de phase pouvez-vous detecter ?
 
 ### II-1-a Modélisation de la croissance sur les temps courts
 
-> Proposer une modélisation pour la croissance de la levure sur un temps court.
+> **Question 2 **Proposer une modélisation pour la croissance de la levure sur un temps court.
 > Rappeler l'équation différentielle de ce modèle, ainsi que la solution analytique.
 
 Dans votre script Scilab commencez par ajuster la taille de la fenêtre de temps afin de n'avoir que la phase qui nous interesse ici.
 
-> En vous aidant de la partie I, écrire à la suite de votre script les lignes de code qui vous permêtent de simuler une croissance exponetielle a l'aide de la fonction `ode`. 
+> **Question 3 **En vous aidant de la partie I, écrire à la suite de votre script les lignes de code qui vous permêtent de simuler une croissance exponetielle a l'aide de la fonction `ode`. 
 > On choisira les paramêtres qui permête de simuler une croissance la plus proche possible des observations.
 > Faite le graphe qui représente à la fois les données et la simulation.
 
@@ -161,13 +164,13 @@ Dans votre script Scilab commencez par ajuster la taille de la fenêtre de temps 
 
 Il n'est pas facile et pas précis de trouver les paramètres « à la main ». C'est pourquoi nous allons appliquer une transformation logarithmique.
 
-> Justifier pourquoi dans ce modèle on devrait trouvez une droite après cette transformation.
+> **Question 4 **Justifier pourquoi dans ce modèle on devrait trouvez une droite après cette transformation.
 
-> Représenter sur un graph le logarithme de la quantité de levure en fonction du temps.
+> **Question 5 **Représenter sur un graph le logarithme de la quantité de levure en fonction du temps.
 > A partir de quelle mesure sort-on du cadre de votre modèle pourquoi?
 
 On pourrait essayer de retrouver à la main les paramètres du modèle en traçant la droite qui passe le mieux par les points. Mais nous allons plutôt ici utiliser la méthode appelée régression linéaire. Pour cela ajoutez au script les lignes suivantes en remplissant les `...`
-```scilab
+```javascript
 //L'indice de la dernière mesure qui appartient encore à la phase dite de temps court
 mesureTempsCourtMax=..;
 // La régression linéaire
@@ -184,45 +187,45 @@ disp(k);
 disp(PO);
 ```
 
-> Quelles valeurs de r et PO trouver vous ? Retrouvez-vous les valeurs trouvé à la main ?
+> **Question 6 **Quelles valeurs de r et PO trouver vous ? Retrouvez-vous les valeurs trouvé à la main ?
 
 ### II-1-b Modélisation de la croissance sur les temps longs
 
-> Pourquoi ce modèle de croissance de population n'est-il pas pertinent pour les temps longs de culture ? 
+> **Question 7 **Pourquoi ce modèle de croissance de population n'est-il pas pertinent pour les temps longs de culture ? 
 > Proposez un autre modèle, justifiez.
 
 
-> Rappelez le modèle de l'équation logistique.
+> **Question 8 **Rappelez le modèle de l'équation logistique.
 > Définissez clairement les paramètres utilisés dans cette fonction.
 
 
 Nous disposons d'une seconde souche de levure, levure *Schizosaccharomyces kephir*, pour laquelle nous recueillons les données de croissance suivantes :
 
-```scilab
+```javascript
 // données expérimentales
 levureK=[ 9,10,23,25.5,42,45.5,66,87,111,135 ; 1.27,1,1.7,2.33,2.73,4.56,4.87,5.67,5.8,5.83];
 ```
 
-> Evaluez la capacité biotique du milieu pour les deux souches de levure : *S. cerevisiae* et *S. Kephir*. 
+> **Question 9 **Evaluez la capacité biotique du milieu pour les deux souches de levure : *S. cerevisiae* et *S. Kephir*. 
 > Pour cela, on pourra directement la lire sur les graphes qui représentent les données.
 
 
 De même que pour le modèle exponentiel nous allons essayer de trouver les paramètres graphiquement en comparant le résultat d'une simulation du modèle logistique au données expérimentales. Pour cela on pourra reprendre les scripts du modèle sur les temps cours et l'ajuster pour le modèle logistique.
 
-> Quel sont les paramètres qui expliquent au mieux les données sur la levure S. Kephir ?
+> **Question 10 **Quel sont les paramètres qui expliquent au mieux les données sur la levure S. Kephir ?
 
 Faites la même chose pour le jeu de données *S. cerevisiae*. 
 
-> Quel sont les paramètres qui expliquent au mieux les données sur la levure S. cerevisiae ?
+> **Question 11 **Quel sont les paramètres qui expliquent au mieux les données sur la levure S. cerevisiae ?
 
-> Comparez les résultats obtenus pour les deux souches.
+> **Question 12 **Comparez les résultats obtenus pour les deux souches.
 > Justifiez alors le temps d'expérimentation pour l'une et l'autre de ces deux souches.
 
 #### Méthode numérique pour trouver les paramètres
 
 Comme pour le modèle exponetiel il existe des méthodes numériques pour trouver les paramètre du modèle logistique de facon automatique. Nous proposons la suivante : 
 
-```scilab
+```javascript
 function xopt=trouve_param_optimaux(tm,ym,x0)
 
 // Fonction permettant de trouver le meilleur set de parametres de la fonction 
@@ -301,7 +304,7 @@ endfunction
 
 Vous pouvez dirrectement copiez-collez ce code dans la console Scilab. Cela définira la fonction `trouve_param_optimaux` qui prend en entré `tm` et `ym` respectivement les temps et quantité experimentales et `x0 = [P0, k , M] ` une approximation des paramètres du modèle logistique.
 
-> En utilisant la fonction `trouve_param_optimaux` quelles valeurs obtenez-vous ? 
+> **Question 13 **En utilisant la fonction `trouve_param_optimaux` quelles valeurs obtenez-vous ? 
 
 ### II-2 Application à l'étude de la croissance de populations bactériennes
 
@@ -310,7 +313,7 @@ Nous allons maintenant appliquer le modèle logistique pour l'étude de la croissa
 
 Copiez ses lignes de code dans un nouvau script pour visualiser les données expérimentales.
 
-```scilab
+```javascript
 // *********************************************************************************************
 // DONNEES EXPERIMENTALES BACTERIES
 //
@@ -338,13 +341,13 @@ end
 legends(["ppGpp"],5,5);
 ```
 
-> Visualisez ces données : qu'en pensez-vous ? Quelle modèle peut-on utiliser ?
+> **Question 14 **Visualisez ces données : qu'en pensez-vous ? Quelle modèle peut-on utiliser ?
 
-> Que pensez-vous de la nécessité de réaliser des répétitions d'expériences ?
+> **Question 15 **Que pensez-vous de la nécessité de réaliser des répétitions d'expériences ?
 > Justifiez vos commentaires ?
 
-> Admettons que nous choisissons un modèle logistique. Nous pouvons calculer de façon automatique les paramètres pour chaque expérience. 
+> **Question 16 **Admettons que nous choisissons un modèle logistique. Nous pouvons calculer de façon automatique les paramètres pour chaque expérience. 
 > Comment allons-nous utiliser toutes les expériences pour estimer au mieux les paramètres ?
 
-> En utilisant les scripts précédents écrivez un script Scilab qui utilise toutes les données à notre disposition pour estimer au mieux les paramètres à chaque espèce. 
+> **Question 17 **En utilisant les scripts précédents écrivez un script Scilab qui utilise toutes les données à notre disposition pour estimer au mieux les paramètres à chaque espèce. 
 > Ainsi interpréter ces valeurs pour conclure sur l'influence de la mutation.
