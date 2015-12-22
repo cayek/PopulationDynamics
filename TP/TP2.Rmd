@@ -1,0 +1,256 @@
+---
+title: "TP2"
+author: "Kevin  Caye"
+date: "`r Sys.Date()`"  
+output: 
+  html_document:
+    theme: united
+    highlight: tango
+---
+
+L'objectif de ce TP est de se failiarisé avec les outils numérique de simulation de croissance simultanée de plusieur populations. Nous allons ainsi simuler différent modèle de compétition et prédation à l'aide de l'outil Scilab et analyser les resultats en fonction des paramètres des modèles.
+
+
+# I- Equation différentielle 2D
+
+Contrairement au TP1 les modèles mathématiques permetant de simuler plusieurs populations simultanément sont des système d'equations différentielles. Dans ce cas il est plus difficile de trouver des solutions analityques. Nous allons voir comment utiliser scilab pour résoudre ses systèmes d'équation et visualiser les résultats.
+
+# I- 1 Résolution avec ode
+
+- Dans Scilab ouvrez un nouveau scipt.
+
+De la même facon que pour les équations différentielle 1D on défini le problème comme ceci : 
+$$\begin{pmatrix}
+\frac{dP_1}{dt} \\
+\frac{dP_2}{dt} 
+\end{pmatrix} = f(t,(P_1,P_2))$$
+
+avec par exemple dans le cas du modèle de compétition 
+
+$$f(t,(P_1,P_2)) = 
+\begin{pmatrix}
+k P_1 \frac{M_1 - P_1 - \alpha P_2}{M_1} \\
+k P_2 \frac{M_2 - P_2 - \beta P_1}{M_2} 
+\end{pmatrix}$$
+
+- Copier collez ses lignes pour définir le modèle de compétition entre populations
+
+```javascript
+//Les paramètres du modèle 
+//taux d'acroissement
+k1=1
+k2=2
+//Capacité biotique
+M1=10
+M2=10
+//Coeficient d'interaction interspecifique
+alpha=1.5
+beta=1.5
+
+// *********************************************************************************************
+// définition de la fonction vectorielle 
+function Pprim=f(t,P)
+  P1=P(1); P2=P(2);
+  P1prim=k1*P1*(M1-P1-alpha*P2)/M1;
+  P2prim=k2*P2*(M2-P2-beta*P1)/M2;
+  Pprim=[P1prim;P2prim];
+endfunction
+```
+
+- ajouter ses lignes pour résoudre les équations défférentielles
+
+```javascript
+//Conditions initals su système
+P10=...
+P20=...
+
+// définition du vecteur t, les temps pour lesquel on veut calculer les fonctions
+t0=0;
+tmax=20;
+dt=0.05;
+t=[t0:dt:tmax];
+
+// resolution numérique
+sol=ode([P10;P20],t0,t,f);
+```
+- On peut maintenant tracer les courbes des solutions en ajoutant ses lignes
+
+```javascript
+clf()
+plot2d(t,sol(1,:),style=[3]);
+legends(["population 1"],3,5);
+plot2d(t,sol(2,:),style=[5]);
+legends(["population 2"],5,5);
+  xtitle('Evolution de populations en compétition','temps','Volume de la population')  
+```
+
+# I- 2 Visualisation des lignes de champs et des trajectoires
+
+Une autre facon pour visualiser les solutions des système d'équation différentielles 2D est de visualiser la trajectoire. C'est à a dire la courbe décrite par le point $(P_1(t),P_2(t))$ au cours du temps. Sur les graphs de trajectoire il est possible d'ajouter un champs de vecteur pour représenter le sens et la direction prises par les trajectoires.
+
+- A la suite du script ajouter ses lignes pour représenter le champs de vecteur 
+
+```javascript
+// tracé du champ de vecteurs
+P1min=0; P1max=M1+10; dP1=2; P2min=0; P2max=M2+10; dP2=2;
+xr=P1min:dP1:P1max; yr=P2min:dP2:P2max;
+xset("window",0)
+clf()
+fchamp(f,0,xr,yr);
+xtitle('Evolution de populations en compétition','population 1','population 2') 
+```
+- ajouté ses lignes de code pour tracer la trajectoire que l'on a calculée
+
+```javascript
+plot2d(sol(1,:),sol(2,:),2,'000');
+```
+
+
+# II-  La compétition entre populations cellulaires : le modèle des levures
+
+Nous allons étudier la compétition entre les levures Saccharomyces cerevisiae et Schizosaccharomyces kephir que vous avez étudiées lors du TP précédent.
+
+
+> **Question 1 **Rappelez en quelques lignes vos conclusions concernant les différences de croissance des populations cellulaires correspondantes. 
+> Rappeler les taux d'accroissement et capacité biotique que vous aviez trouvé.
+
+Maintenant que  nous savons comment caractériser la croissance de différentes populations de levures cultivées séparément, nous allons nous intéresser à la modélisation de situations de compétition entre espèces.  
+
+Nous n'avons ici plus de données réelles. Nous n'avons donc plus pour objectif d'ajuster et valider le modèle, nous voulons étudier le comportement prédit par ce modèle. 
+
+Enfin nous ferons l'hypothèse que la capacité biotique et le taux d'accroissement reste le même lorsque les deux espèces évoluent ensemble.
+
+> **Question 2 **Rappeler le modèle d'évolution d'espèces en compétitions vu en cours, en précisant le sens de chacun des paramètres.
+
+Pour simuler l'évolution des deux population en compétition copiez le code suivant dans un nouveau script en completant les `...`
+
+
+```javascript
+clear;
+
+// *********************************************************************************************
+// 1_competition.sce
+//
+// Simulation de populations en competition
+//
+
+//Les paramètres du modèle 
+//taux d'acroissement
+k1=...
+k2=...
+//Capacité biotique
+M1=...
+M2=...
+//Coeficient d'interaction interspecifique
+alpha=...
+beta=...
+
+// *********************************************************************************************
+// définition de la fonction vectorielle 
+function Pprim=f(t,P)
+  P1=P(1); P2=P(2);
+  P1prim=...;
+  P2prim=...;
+  Pprim=[P1prim;P2prim];
+endfunction
+
+// tracé du champ de vecteurs
+P1min=0; P1max=M1+10; dP1=2; P2min=0; P2max=M2+10; dP2=2;
+xr=P1min:dP1:P1max; yr=P2min:dP2:P2max;
+xset("window",0)
+clf()
+fchamp(f,0,xr,yr);
+xtitle('Evolution de populations en compétition','Espece 1','Espece 2')
+
+// tracé des trajectoires
+t0=0; tf=200; dt=0.05;
+T=t0:dt:tf;
+fini=%f;
+while(~fini)
+  //acquisition du nouveau point
+  [c_i,x0,y0]=xclick();
+  if ~(x0>=P1min & x0<=P1max & y0>=P2min & y0<=P2max) then
+    //le point est en dehors du cadre : on arrête l'itération
+    fini=%t;
+  else
+    //le point est pris en compte : calcul de la solution
+    sol=ode([x0;y0],t0,T,f);
+    //tracé de la courbe paramétrée
+    plot2d(sol(1,:),sol(2,:),2,'000');
+  end
+end
+```
+Ce script permet de tracer les lignes de champs. Vous pouvez cliquer sur le graph pour choisir un état initial et voir apparaitre la trajectoire suivi par le système dyamique.
+
+
+Nous allons étudier les points d'équilibre du modèle de croissance en compétition. 
+
+> **Question 3 **Comment trouve-t-on les points d'équilibre d'un système dynamique ?
+> Faite une phrase et donner la définition mathématique.
+
+> **Question 4 **Rappelez l'expression des points d'équilibre du modèle de croissance en compétition.
+
+> **Question 5 **Rappelez en une phrase ce que sinifie qu'un point d'équilibre est stable ? instable ?
+> Utiliser le script précédent pour un point d'équilibre stable et un point d'équilibre instable.
+
+> **Question 6 **En jouant avec les paramètres `apha` et `beta` faite des simulations où : 
+> - la levure Kephir ne peut pas survivre
+> - la levure cerevisiae ne peut pas survivre
+> - il y a cohabitation entre les deux souches
+> - la survi de l'une ou l'autre des souches dépend de l'état initial
+
+# III- Le système Proie-prédateur
+
+# III- 1 Lotka-Voltera
+
+
+Dans cette partie, nous allons simuler le modèle de Lotka-Voltera simple vu en cours.
+
+> **Question 7**Rappelez le modèle de Lotka-Voltera vu en cours, en précisant le sens de chacun des paramètres. 
+
+
+> **Question 8** Rappelez les hypothèses les plus fortes qui sont faites dans cette modélisation.
+
+Faites un scrip qui permet de simuler et visualiser les trajectoires du modèle de Lotka-Voltera. On pourra copier un des scripts fait dans les parties précédentes et modifier les bonnes parties.
+
+> **Question 9 **Rappelez l'expression des points d'équilibres du modèle de Lotka-Voltera. Faite un graphe qui met en évidence la stabilité et l'instabilité de ses points d'équilibre.
+
+> **Question 10 **Interprétez les trajectoires en terme d'évolution des populations de proie et de prédateur. 
+
+Faites un script qui permet de tracer sur un même graphe la quantité de proies en fontion du temps et la quantité de prédateur en fonction du temps. On pourra copier un des scripts faits dans la partie I. 
+
+> **Question 11 **Avec ses graphs, retrouve-t-on les interprétations faire dans la question 10 ?
+
+# III- 1 Lotka-Voltera avec croissance limitée
+
+Nous voulons maintenant ajouter au modèle des contraintes environnementales sur l'évolution des proies :
+
+$$ \frac{dP_1}{dt} = k_1 P_1 \frac{M - P_1}{M} - \alpha P_1 P_2 \\
+\frac{dP_2}{dt} = - k_2 P_2 + \beta P_1 P_2
+$$
+
+
+> **Question 12 **Quelles sont les différences avec le modèle Lotka-Voltera classic ? Expliquer pourquoi on pose se modèle et que représente M.
+
+Faites un scrip qui permet de simuler et visualiser les trajectoires du modèle de Lotka-Voltera avec croissance limitée. On pourra copier un des scripts fait dans les parties précédentes et modifier les bonnes parties. 
+
+Nous allons commencer par prendre k1=k2=1 et M=3. 
+
+> **Question 13 **En modifiant les paramètres alpha et beta montrez des graphes qui mettent en évidence différents points d'équilibres stables. 
+
+Nous allons maintenant prendre alpha=beta=1 et M=3.
+
+> **Question 14 **En prenant k1=1 dire quelle est l'influence de k2 sur l'évolution des populations. Vous pourrez montrer deux graphes et les interpréter.
+
+> **Question 15 **Même question avec k2=1 dire quelle est l'influence de k1 sur l'évolution des populations.
+
+Représentez les courbes qui correspondent aux trajectoires que vous avez choisies de montrer dans les questions précédentes. On pourra copier un des scripts faits dans les parties précédentes et modifier les bonnes parties.
+
+Dans ce script on prend alpha=beta=1, M=3 et k1=k2=1. 
+
+> **Question 16 **Quelle valeur M faut-il prendre pour que les prédateurs ne finissent par disparaitre ? Interpréter.
+
+> **Question 18 **De même faites disparaitre les prédateurs en jouant sur alpha et beta. Interpréter.
+
+> **Question 19 **A votre avis dans ce modèle les proies peuvent-elles disparaitre ? Justifier.
+
