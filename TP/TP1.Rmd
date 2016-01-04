@@ -16,18 +16,18 @@ Dans ce contexte, les problèmes rencontrés par les biologistes représentent un s
 
 ## I-1 Premiers pas
 
-Le travail experimental sera effectué avec le logiciel Scilab. Cette partie a pour objectif de vous familiariser avec cet outils.
+Le travail expérimental sera effectué avec le logiciel Scilab. Cette partie a pour objectif de vous familiariser avec cet outil.
 
 - Ouvrez le logiciel Scilab.
 - Ouvrez SciNotes l'éditeur de texte qui va nous permettre d'écrire les scripts : *Applicatins -> SciNotes* 
-- Copier les données experimentales dans SciNotes
+- Copiez les données expérimentales dans SciNotes
 ```javascript
 // données expérimentales
 levureC=[ 0 1.5 9 10 18 18 23 25.5 27 34 38 42 45.5 47 ; 0.37 1.63 6.2 8.87 10.66 10.97 12.5 12.6 12.9 13.27 12.77 12.87 12.9 12.7];
 ```
-Ces lignes vont creer une matrice avec le temps en première colonne et la quantité de levure en deuxieme colonne.
+Ces lignes vont créer une matrice avec le temps en première colonne et la quantité de levure en deuxième colonne.
 
-- Copier ses lignes à la suite pour faire un plot des données 
+- Copiez ces lignes à la suite pour faire un plot des données 
 ```javascript
 //Ouvre une nouvelle fenêtre graphique
 clf();
@@ -36,17 +36,17 @@ clf();
 plot2d(levureC(1,:),levureC(2,:),style=[-2]);
 ```
 
-- Sauvgarder votre script : *ctrl + s*
-- Executer votre script : *ctrl + maj + e*. Les lignes de code sont alors envoyé dans la console pour eter executé. Quand ils y a des **erreurs** dans les scripts c'est dans cette **console** que les erreurs s'affichent. 
+- Sauvegardez votre script : *ctrl + s*
+- Exécutez votre script : *ctrl + maj + e*. Les lignes de code sont alors envoyés dans la console pour être exécuté. Quand ils y a des **erreurs** dans les scripts c'est dans cette **console** que les erreurs s'affichent. 
 
-Nous allons ameliorer le plot : 
+Nous allons améliorer le plot : 
 
-- Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
+- Copiez ces lignes puis exécuter le script pour voir ce qui a changé
 ```javascript
 // tracé de segments de droites entre les divers points
 plot2d(levureC(1,:),levureC(2,:),style=[5]);
 ```
-- Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
+- Copiez ces lignes puis exécutez le script pour voir ce qui a changé
 ```javascript
 // définition de la fenêtre graphique
 Tmin=0
@@ -58,7 +58,7 @@ rect=[Tmin,DOmin;Tmax,DOmax];
 a=gca();
 a.data_bounds=rect;
 ```
-- Copier ses lignes ses lignes puis executer le script pour voir se qui a changé
+- Copiez ses lignes ces lignes puis exécutez le script pour voir ce qui a changé
 ```javascript
 legends(["Levure Cerevisae"],5,5);
 // un clic de souris permet de placer la légende à l'emplacement désiré
@@ -74,7 +74,7 @@ $$\frac{dP}{dt} = k P$$
 Nous avons vu en cours que l'on a une solution analytique à cette équation différentielle : 
 $$P(t) = P_0 e^{k t}$$
 
-- Copier ses lignes dans le nouveau script pour définir la fonction de la solution. On remlira les trous `...`. Pensez a executer votre script et verifier dans la console qu'il n'y à pas d'erreur.
+- Copiez ces lignes dans le nouveau script pour définir la fonction de la solution. On remplira les trous `...`. Pensez à exécuter votre script et à vérifier dans la console qu'il n'y à pas d'erreur.
 ```javascript
 // Paramètre du modèle
 P0 = ...
@@ -85,7 +85,7 @@ function res=P(t)
 endfunction
 ```
 
-- Copier les lignes suivantes à la suite en remplissant les trous `...`
+- Copiez les lignes suivantes à la suite en remplissant les trous `...`
 ```javascript
 // définition du vecteur t, les temps pour lesquel on veut calculer la fonction
 t0=0;
@@ -95,12 +95,12 @@ t=[t0:dt:tmax];
 // plot
 plot2d(..., ..., style=[5]);
 ```
-- Visualisez le resultat, vous devez reconnaitre le graph de la fonction exponentielle
+- Visualisez le résultat, vous devez reconnaître le graphe de la fonction exponentielle
 
-Nous allons maintenant résoudre le problème numériquement. C'est à dire que l'on va calculer la fonction solution de l'équation diférentielle avec les outils de résolution numérique de Scilab.
-On va d'abord définir l'équation diférentielle : 
+Nous allons maintenant résoudre le problème numériquement. C'est à dire que l'on va calculer la fonction solution de l'équation différentielle avec les outils de résolution numérique de Scilab.
+On va d'abord définir l'équation différentielle : 
 $$\frac{dP}{dt} = f(t,P)$$
-avec $f(t,P) = k * P$
+avec $f(t,P) = k  P$
 
 - A la suite du script copier les lignes suivantes en remplissant les trous `...`
 ```javascript
@@ -108,38 +108,39 @@ function Pprim=f(t,P)
   Pprim = ...;
 endfunction
 ```
-Nous alons ensuite utiliser la fonction `ode` de Scilab. Le principe des "solveurs numériques" est de calculer la solution de l'équation diférentiel $\frac{dP}{dt} = f(P)$ de proche en proche. Si on connait la valeur de $P$ au temps $t$ on calcule la valeur au temps $t + dt$ comme ceci : 
+
+Nous allons ensuite utiliser la fonction `ode` de Scilab. Le principe des "solver numériques" est de calculer la solution de l'équation différentielle $\frac{dP}{dt} = f(P)$ de proche en proche. Si on connait la valeur de $P$ au temps $t$ on calcule la valeur au temps $t + dt$ comme ceci : 
 $$\frac{P(t + dt) - P(t)}{dt} = f(t,P(t))$$
 donc
 $$P(t + dt) = P(t) + f(t,P(t)) dt $$
-Ainsi plus $dt$ est petit meilleurs est l'approximation. Les algorithme implémenté dans `ode`sont plus complexe mais suivent cette idée.
+Ainsi plus $dt$ est petit meilleur est l'approximation. Les algorithmes implémentés dans `ode`sont plus complexes mais suivent cette idée.
 
 Maintenant que nous avons l'intuition du fonctionnement de la fonction `ode` nous allons l'utiliser pour résoudre notre problème
 
-- A la suite du script copier les lignes suivantes 
+- A la suite du script, copiez les lignes suivantes 
 ```javascript
 // Résolution numérique
 Pnum=ode(P0,t0,t,f);
 ```
 
-- Faite un graph de la solution numérique en ajoutant ces lignes
+- Faite un graphe de la solution numérique en ajoutant ces lignes
 ```javascript
 plot2d(..., ..., style=[4]);
 ```
 
 
-Normalement quand vous exécuté tout le script les courbes de la solutions analytique et numérique se suerposent parfaitement.
+Normalement quand vous exécutez tout le script les courbes de la solution analytique et numérique se superposent parfaitement.
 
 
 
 # II- Modélisation et simulation
 
-Cette partie comportent des questions, nous vous conseillons de bien y **répondre et noter les réponses**. De plus nous vous conseillons de bien **sauvgarder les graphiques** que vous générez. Tout cela sera util pour le **rapport**.
+Cette partie comporte des questions, nous vous conseillons de bien y **répondre et noter les réponses**. De plus nous vous conseillons de bien **sauvegarder les graphiques** que vous générez. Tout cela sera utile pour le **rapport**.
 
 
 ## II-1 Modélisation de la croissance d'une populattion de levure
 
-Voici les données expérimental d'une croissance d'une souche de levure *Saccharomyces cerevisae* : 
+Voici les données expérimentales d'une croissance d'une souche de levure *Saccharomyces cerevisae* : 
 
 ```javascript
 // données expérimentales
@@ -154,11 +155,11 @@ levureC=[ 0 1.5 9 10 18 18 23 25.5 27 34 38 42 45.5 47 ; 0.37 1.63 6.2 8.87 10.6
 > **Question 2 **Proposer une modélisation pour la croissance de la levure sur un temps court.
 > Rappeler l'équation différentielle de ce modèle, ainsi que la solution analytique.
 
-Dans votre script Scilab commencez par ajuster la taille de la fenêtre de temps afin de n'avoir que la phase qui nous interesse ici.
+Dans votre script Scilab commencez par ajuster la taille de la fenêtre de temps afin de n'avoir que la phase qui nous intéresse ici.
 
-> **Question 3 **En vous aidant de la partie I, écrire à la suite de votre script les lignes de code qui vous permêtent de simuler une croissance exponetielle a l'aide de la fonction `ode`. 
-> On choisira les paramêtres qui permête de simuler une croissance la plus proche possible des observations.
-> Faite le graphe qui représente à la fois les données et la simulation.
+> **Question 3 **En vous aidant de la partie I, écrire à la suite de votre script les lignes de code qui vous permêtent de simuler une croissance exponetielle à l'aide de la fonction `ode`. 
+> On choisira les paramêtres qui permêtent de simuler une croissance la plus proche possible des observations.
+> Faire le graphe qui représente à la fois les données et la simulation.
 
 #### Représentation logarithmique
 
@@ -166,7 +167,7 @@ Il n'est pas facile et pas précis de trouver les paramètres « à la main ». C'est
 
 > **Question 4 **Justifier pourquoi dans ce modèle on devrait trouvez une droite après cette transformation.
 
-> **Question 5 **Représenter sur un graph le logarithme de la quantité de levure en fonction du temps.
+> **Question 5 **Représenter sur un graphe le logarithme de la quantité de levure en fonction du temps.
 > A partir de quelle mesure sort-on du cadre de votre modèle pourquoi?
 
 On pourrait essayer de retrouver à la main les paramètres du modèle en traçant la droite qui passe le mieux par les points. Mais nous allons plutôt ici utiliser la méthode appelée régression linéaire. Pour cela ajoutez au script les lignes suivantes en remplissant les `...`
@@ -187,16 +188,16 @@ disp(k);
 disp(PO);
 ```
 
-> **Question 6 **Quelles valeurs de r et PO trouver vous ? Retrouvez-vous les valeurs trouvé à la main ?
+> **Question 6 **Quelles valeurs de r et PO trouvez-vous ? Retrouvez-vous les valeurs trouvées à la main ?
 
 ### II-1-b Modélisation de la croissance sur les temps longs
 
 > **Question 7 **Pourquoi ce modèle de croissance de population n'est-il pas pertinent pour les temps longs de culture ? 
-> Proposez un autre modèle, justifiez.
+> Proposez un autre modèle, justifier.
 
 
-> **Question 8 **Rappelez le modèle de l'équation logistique.
-> Définissez clairement les paramètres utilisés dans cette fonction.
+> **Question 8 **Rappeler le modèle de l'équation logistique.
+> Définir clairement les paramètres utilisés dans cette fonction.
 
 
 Nous disposons d'une seconde souche de levure, levure *Schizosaccharomyces kephir*, pour laquelle nous recueillons les données de croissance suivantes :
@@ -206,24 +207,24 @@ Nous disposons d'une seconde souche de levure, levure *Schizosaccharomyces kephi
 levureK=[ 9,10,23,25.5,42,45.5,66,87,111,135 ; 1.27,1,1.7,2.33,2.73,4.56,4.87,5.67,5.8,5.83];
 ```
 
-> **Question 9 **Evaluez la capacité biotique du milieu pour les deux souches de levure : *S. cerevisiae* et *S. Kephir*. 
+> **Question 9 **Evaluer la capacité biotique du milieu pour les deux souches de levure : *S. cerevisiae* et *S. Kephir*. 
 > Pour cela, on pourra directement la lire sur les graphes qui représentent les données.
 
 
 De même que pour le modèle exponentiel nous allons essayer de trouver les paramètres graphiquement en comparant le résultat d'une simulation du modèle logistique au données expérimentales. Pour cela on pourra reprendre les scripts du modèle sur les temps cours et l'ajuster pour le modèle logistique.
 
-> **Question 10 **Quel sont les paramètres qui expliquent au mieux les données sur la levure S. Kephir ?
+> **Question 10 **Quels sont les paramètres qui expliquent au mieux les données de la levure S. Kephir ?
 
-Faites la même chose pour le jeu de données *S. cerevisiae*. 
+Faites la même chose pour le jeu de donnée *S. cerevisiae*. 
 
-> **Question 11 **Quel sont les paramètres qui expliquent au mieux les données sur la levure S. cerevisiae ?
+> **Question 11 **Quels sont les paramètres qui expliquent au mieux les données de la levure S. cerevisiae ?
 
-> **Question 12 **Comparez les résultats obtenus pour les deux souches.
-> Justifiez alors le temps d'expérimentation pour l'une et l'autre de ces deux souches.
+> **Question 12 **Comparer les résultats obtenus pour les deux souches.
+> Justifier alors le temps d'expérimentation pour l'une et l'autre de ces deux souches.
 
 #### Méthode numérique pour trouver les paramètres
 
-Comme pour le modèle exponetiel il existe des méthodes numériques pour trouver les paramètre du modèle logistique de facon automatique. Nous proposons la suivante : 
+Comme pour le modèle exponentiel il existe des méthodes numériques pour trouver les paramètres du modèle logistique de façon automatique. Nous proposons la suivante : 
 
 ```javascript
 function xopt=trouve_param_optimaux(tm,ym,x0)
@@ -302,16 +303,16 @@ xsup=[20;20;20];
 endfunction
 ```
 
-Vous pouvez dirrectement copiez-collez ce code dans la console Scilab. Cela définira la fonction `trouve_param_optimaux` qui prend en entré `tm` et `ym` respectivement les temps et quantité experimentales et `x0 = [P0, k , M] ` une approximation des paramètres du modèle logistique.
+Vous pouvez directement copier-coller ce code dans la console Scilab. Cela définira la fonction `trouve_param_optimaux` qui prend en entrée `tm` et `ym` respectivement les temps et quantité expérimentale et `x0 = [P0, k , M] ` une approximation des paramètres du modèle logistique.
 
-> **Question 13 **En utilisant la fonction `trouve_param_optimaux` quelles valeurs obtenez-vous ? 
+> **Question 13 **En utilisant la fonction `trouve_param_optimaux`, quelles valeurs obtenez-vous ? 
 
 ### II-2 Application à l'étude de la croissance de populations bactériennes
 
 
 Nous allons maintenant appliquer le modèle logistique pour l'étude de la croissance de la bactérie E. Coli. Nous disposons de deux jeux de données correspondant à deux souches bactériennes différentes (wt = souche sauvage et ppG = souche mutée) cultivées selon les mêmes conditions. Pour chacune de ces souches nous disposons de 9 à 8 répétitions expérimentales.
 
-Copiez ses lignes de code dans un nouvau script pour visualiser les données expérimentales.
+Copiez ses lignes de code dans un nouveau script pour visualiser les données expérimentales.
 
 ```javascript
 // *********************************************************************************************
@@ -341,7 +342,7 @@ end
 legends(["ppGpp"],5,5);
 ```
 
-> **Question 14 **Visualisez ces données : qu'en pensez-vous ? Quelle modèle peut-on utiliser ?
+> **Question 14 **Visualiser ces données : qu'en pensez-vous ? Quel modèle peut-on utiliser ?
 
 > **Question 15 **Que pensez-vous de la nécessité de réaliser des répétitions d'expériences ?
 > Justifiez vos commentaires ?
