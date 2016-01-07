@@ -58,7 +58,7 @@ endfunction
 - ajoutez ces lignes pour résoudre les équations 
 
 ```javascript
-//Conditions initals su système
+//Conditions initales du système
 P10=...
 P20=...
 
@@ -105,6 +105,9 @@ plot2d(sol(1,:),sol(2,:),2,'000');
 
 
 # II-  La compétition entre populations cellulaires : le modèle des levures
+
+
+Cette partie comporte des questions, nous vous conseillons de bien y **répondre et noter les réponses**. De plus nous vous conseillons de bien **sauvegarder les graphiques** que vous générez. Tout cela sera utile pour le **rapport**.
 
 Nous allons étudier la compétition entre les levures Saccharomyces cerevisiae et Schizosaccharomyces kephir que vous avez étudiées lors du TP précédent.
 
@@ -190,7 +193,8 @@ Nous allons étudier les points d'équilibre du modèle de croissance en compétitio
 > **Question 5 **Rappeler en une phrase ce que sinifie qu'un point d'équilibre est stable ? instable ?
 > Utiliser le script précédent pour représenter des trajectoires metant en évidence un point déquilibre stable et un point d'équilibre instable.
 
-> **Question 6 **En jouant avec les paramètres `apha` et `beta` faites des simulations où : 
+> **Question 6 **En jouant avec les paramètres `apha` et `beta` faites des simulations où :
+>
 > - la levure Kephir ne peut pas survivre
 > - la levure cerevisiae ne peut pas survivre
 > - il y a cohabitation entre les deux souches
@@ -203,10 +207,10 @@ Nous allons étudier les points d'équilibre du modèle de croissance en compétitio
 
 Dans cette partie, nous allons simuler le modèle de Lotka-Voltera simple vu en cours.
 
-> **Question 7**Rappelez le modèle de Lotka-Voltera vu en cours, en précisant le sens de chacun des paramètres. 
+> **Question 7 **Rappelez le modèle de Lotka-Voltera vu en cours, en précisant le sens de chacun des paramètres. 
 
 
-> **Question 8** Rappelez les hypothèses les plus fortes qui sont faites dans cette modélisation.
+> **Question 8 **Rappelez les hypothèses les plus fortes qui sont faites dans cette modélisation.
 
 Faites un script qui permet de simuler et visualiser les trajectoires du modèle de Lotka-Voltera. On pourra copier un des scripts faits dans les parties précédentes et modifier les bonnes parties.
 

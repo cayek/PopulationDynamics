@@ -72,7 +72,7 @@ $$\frac{dP}{dt} = k P$$
 Nous avons vu en cours que l'on a une solution analytique à cette équation différentielle : 
 $$P(t) = P_0 e^{k t}$$
 
-- Copiez ces lignes dans le nouveau script pour définir la fonction de la solution. On remplira les trous `...`. Pensez à exécuter votre script et à vérifier dans la console qu'il n'y à pas d'erreur.
+- Copiez ces lignes dans le nouveau script pour définir la fonction solution. On remplira les trous `...`. Pensez à exécuter votre script et à vérifier dans la console qu'il n'y à pas d'erreur.
 ```javascript
 // Paramètre du modèle
 P0 = ...
@@ -173,7 +173,7 @@ On pourrait essayer de retrouver à la main les paramètres du modèle en traçant l
 //L'indice de la dernière mesure qui appartient encore à la phase dite de temps court
 mesureTempsCourtMax=..;
 // La régression linéaire
-[k,lnPO] = reglin(levure(1,1:mesureTempsCourtMax),levure(2,1:mesureTempsCourtMax));
+[k,lnPO] = reglin(levure(1,1:mesureTempsCourtMax),log(levure(2,1:mesureTempsCourtMax)));
 
 //On trace la droite
 plot2d(levure(1,1:mesureTempsCourtMax),levure(1,1:mesureTempsCourtMax) * k + lnPO ,style=[4]);
@@ -301,7 +301,13 @@ xsup=[20;20;20];
 endfunction
 ```
 
-Vous pouvez directement copier-coller ce code dans la console Scilab. Cela définira la fonction `trouve_param_optimaux` qui prend en entrée `tm` et `ym` respectivement les temps et quantité expérimentale et `x0 = [P0, k , M] ` une approximation des paramètres du modèle logistique.
+Vous pouvez directement copier-coller ce code dans la console Scilab. Cela définira la fonction `trouve_param_optimaux` qui prend en entrée `tm` et `ym` respectivement les temps et quantité expérimentale et `x0 = [P0; k; M]` une approximation des paramètres du modèle logistique. 
+
+Par exemple pour utiliser la fonction sur les données de la levure *Kephir* on pourra utiliser ces lignes : 
+```matlab
+x0 = [P0; k; M]
+trouve_param_optimaux(levureK(1,:)',levureK(2,:)',x0);
+```
 
 > **Question 13 **En utilisant la fonction `trouve_param_optimaux`, quelles valeurs obtenez-vous ? 
 
