@@ -1,0 +1,152 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+%\usepackage{lmodern}%pour un meilleur rendu des polices
+\usepackage{verbatim}%du texte non interprt
+\usepackage{amsmath,amssymb}%maths
+\usepackage{graphicx}%images
+\usepackage{xspace}
+\usepackage{color}%Couleurs
+\usepackage{listings}
+\usepackage[a4paper, top= 2.5 cm, bottom = 2.5 cm, left = 2.5 cm, right = 2.5 cm] {geometry}
+\usepackage{listings}
+\lstset{
+  morekeywords={abort,abs,accept,access,all,and,array,at,begin,body,
+      case,constant,declare,delay,delta,digits,do,else,elsif,end,entry,
+      exception,exit,for,function,generic,goto,if,in,is,limited,loop,
+      mod,new,not,null,of,or,others,out,package,pragma,private,
+      procedure,raise,range,record,rem,renames,return,reverse,select,
+      separate,subtype,task,terminate,then,type,use,when,while,with,
+      xor,abstract,aliased,protected,requeue,tagged,until},
+  sensitive=f,
+  morecomment=[l]--,
+  morestring=[d]",
+  showstringspaces=false,
+  basicstyle=\small\ttfamily,
+  keywordstyle=\bf\small,
+  commentstyle=\itshape,
+  stringstyle=\sf,
+  extendedchars=true,
+  columns=[c]fixed
+}
+
+
+%\usepackage{lastpage}%nombre de pages
+%En tte et pied de page
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{\sectionmark} 
+\chead{}
+\rhead{}
+\lfoot{SCI123 - dynamique des populations}
+\cfoot{\textbf}
+\rfoot{\thepage\ }
+\renewcommand{\headrulewidth}{0pt}  
+\renewcommand{\footrulewidth}{0.4pt}
+%Page de garde
+\makeatletter
+\def\thickhrulefill{\leavevmode \leaders \hrule height 1pt\hfill \kern \z@}
+\def\maketitle{%
+  \thispagestyle{empty}%
+  \begin{center}
+  \begin{flushleft}
+  \normalfont\LARGE \par
+	  \end{flushleft}
+	\vskip 4.5cm
+	  \leavevmode
+	  \normalfont
+	  \thickhrulefill\par
+	  \vskip 0.2cm
+	  {\huge\@title\par}%
+	  \vskip 0.1cm
+  \thickhrulefill\par
+	  \vskip 1cm
+	  {\Large \@date\par}%
+  \vskip 8cm
+  {\Large \@author\par}
+  \end{center}%
+\clearpage
+}
+
+
+
+
+
+\begin{document}
+
+\section*{Sujet 1 : Le lichen}
+
+Nous avons vu en cours un modèle de la dynamique de deux populations en compétition
+pour les ressources : chaque population limite l'accès au ressource de l'autre.
+Dans la nature, il existe aussi de nombreux exemples de relation de symbiose entre population.
+Le lichen est, par exemple, une union entre une algue unicellulaire et un champignon :
+l'algue retire de la relation un apport important en eau et en sels minéraux. Le champignon,
+hétérotrophe, retire de l'algue le glucose nécessaire à sa croissance. Autrement dit, chacune
+des populations favorise la croissance de l'autre, alors que dans une relation de compétition
+elle l'inhibe.
+
+
+En vous inspirant du système d'équations donné dans le cas d'une compétition, proposez un
+modèle de relation symbiotique entre deux populations. Étudiez d'abord mathématiquement
+ce modèle. Notamment, vous chercherez à savoir quelles sont les conditions permettant d'avoir
+un état d'équilibre. Déduisez-en les différents comportements possibles du système en fonction
+de la valeur des paramètres. Interprétez biologiquement le résultat. Écrivez le code Scilab
+correspondant, et réalisez la simulation pour illustrer vos conclusions.
+
+\section*{Sujet 2 : Évolution d'un consommateur et d'une ressource}
+
+Dans les modèles vus en cours nous ne modélisons pas explicitement l'évolution des ressources présentes dans le milieu.
+
+Variables : 
+\begin{itemize}
+\item $R(t)$ Concentration de ressources disponibles
+\item $N(t)$ Les consommateurs
+\end{itemize}
+
+Paramètres : 
+\begin{itemize}
+\item $S$ Concentration maximale de ressource dans l'habitat
+
+\item $F$ Taux de croissance des ressources
+\item $\mu$ Taux de croissance maximum des consommateurs
+\item $D$ Taux de mortalité des consommateurs
+\item $K$ Constante de saturation (pour nourrir les consommateurs)
+\item $Q$ Quantité de ressource nécessaire pour créer un consomateur
+\end{itemize}
+
+\begin{displaymath}
+\left\{
+\begin{array}{lcl}
+\frac{dN}{dt} & = &  (\mu \frac{R}{R + K} - D) N \\
+\frac{dR}{dt} & = & F ( S - R ) - Q \mu \frac{R}{R + K} N\\
+\end{array}
+\right.
+\end{displaymath}
+
+Dans un premier temps vous comparerez ce modèle aux autres modèles vus dans le thème. Vous tacherez de justifier les nouveaux termes qui apparaissent dans ce modèle, et d'expliquer leurs noms. Ensuite vous pourrez calculer les points d'équilibre de ce système d'équations différentielles. On pourra ensuite implémenter dans scilab la simulation du modèle afin d'étudier la stabilité des points d'équilibres ainsi que influence des différents paramètres sur la simulation. 
+Pour finir on pourra comparer le comportement du modèle à des situations réelles à choisir. 
+
+\section*{Sujet 3 : Modèle plus réaliste proie-prédateur}
+
+Nous allons nous intéresser à un modèle proie-prédateur plus réaliste que celui vu en cours :
+
+\begin{displaymath}
+\left\{
+\begin{array}{lcl}
+\frac{dP_1}{dt} & = & P_1 k_1 (1 - \frac{P_1}{M_1}) - \frac{r}{P_1 + D} P_1 P_2 \\
+\frac{dP_2}{dt} & = & P_2 k_2 ( 1 - \frac{h P_2}{P_1} ) \\
+\end{array}
+\right.
+\end{displaymath}
+
+Dans un premier temps vous comparerez ce modèle aux autres modèles vus dans le thème. Vous tacherez de justifier les nouveaux termes qui apparaissent dans ce modèle, et d'expliquer leurs noms. Ensuite vous pourrez calculer les points d'équilibre de ce système d'équations différentielles. On pourra ensuite implémenter dans scilab la simulation du modèle afin d'étudier la stabilité des points d'équilibres ainsi que influence des différents paramètres sur la simulation. 
+Pour finir on pourra comparer le comportement du modèle à des situations réelles à choisir. 
+
+\section*{Sujet 4 : le spruce-budworm}
+
+Dans ce sujet nous allons étudier l'évolution d'une population de mythes qui peuvent si ils sont en forte concentration ravager des forets et donc poser un problème pour la production locale de bois. Une étude du modèle vous permettra de dégager des solutions pratiques pour contrôler cette population de mythe.
+
+
+
+\end{document}
